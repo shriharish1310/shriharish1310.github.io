@@ -5,6 +5,7 @@ import { defineConfig } from "vite";
 import { vitePluginManusRuntime } from "vite-plugin-manus-runtime";
 
 export default defineConfig({
+  base: './',
   plugins: [
     react(),
     tailwindcss(),
