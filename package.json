@@ -1,0 +1,10 @@
+{
+  "name": "portfolio-site",
+  "private": true,
+  "scripts": {
+    "build": "esbuild styles.css --minify --outfile=styles.min.css && esbuild main.js --minify --legal-comments=none --outfile=main.min.js"
+  },
+  "devDependencies": {
+    "esbuild": "^0.25.0"
+  }
+}
