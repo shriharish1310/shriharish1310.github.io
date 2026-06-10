@@ -325,12 +325,14 @@ function Hero({
   burstSignal,
   onMode,
   onPause,
+  onResume,
 }: {
   mode: ParticleMode;
   paused: boolean;
   burstSignal: number;
   onMode: (mode: ParticleMode) => void;
   onPause: () => void;
+  onResume: () => void;
 }) {
   const [phraseIndex, setPhraseIndex] = useState(0);
 
@@ -359,7 +361,7 @@ function Hero({
           </motion.div>
           <motion.div className="hero-actions" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 2.05 }}>
             <a className="primary-btn" href="#projects">explore my work <ArrowRight size={18} /></a>
-            <a className="soft-btn" href={resumePath} download><Download size={18} /> resume</a>
+            <button className="soft-btn" type="button" onClick={onResume}><Download size={18} /> resume</button>
             <a className="soft-btn" href="mailto:shriharish12345@gmail.com"><Mail size={18} /> say hi</a>
           </motion.div>
           <div className="keyboard-row">
@@ -587,11 +589,49 @@ function Contact() {
           <a className="primary-btn" href="mailto:shriharish12345@gmail.com"><Mail size={18} /> Email</a>
           <a className="soft-btn" href="https://linkedin.com/in/shriharishs"><BrandIcon label="IN" /> LinkedIn</a>
           <a className="soft-btn" href="https://github.com/shriharish1310"><BrandIcon label="GH" /> GitHub</a>
-          <a className="soft-btn" href={resumePath} download><Download size={18} /> Resume</a>
+          <ResumeButton />
         </div>
         <p className="muted">College Station, TX - 657-558-1379 - shriharish1310.github.io</p>
       </div>
     </Section>
+  );
+}
+
+function ResumeButton() {
+  return (
+    <button className="soft-btn" type="button" onClick={() => window.dispatchEvent(new CustomEvent("open-resume"))}>
+      <Download size={18} /> Resume
+    </button>
+  );
+}
+
+function ResumeModal({ open, onClose }: { open: boolean; onClose: () => void }) {
+  useEffect(() => {
+    function onKey(event: KeyboardEvent) {
+      if (event.key === "Escape") onClose();
+    }
+    if (open) window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open, onClose]);
+
+  return (
+    <AnimatePresence>
+      {open && (
+        <motion.div className="modal-backdrop resume-backdrop" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onMouseDown={onClose}>
+          <motion.article className="resume-modal" initial={{ opacity: 0, y: 24, scale: 0.97 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 16, scale: 0.98 }} onMouseDown={(event) => event.stopPropagation()}>
+            <button className="round-btn close-btn" onClick={onClose} aria-label="close resume"><X size={18} /></button>
+            <div className="resume-modal-header">
+              <div>
+                <p className="section-note">resume</p>
+                <h3>Shri Harish Saravanan</h3>
+              </div>
+              <a className="soft-btn" href={resumePath} target="_blank" rel="noreferrer">open in new tab</a>
+            </div>
+            <iframe title="Shri Harish Saravanan Resume" src={`${resumePath}#toolbar=1&navpanes=0`} />
+          </motion.article>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 }
 
@@ -622,6 +662,15 @@ export default function App() {
   const [burstSignal, setBurstSignal] = useState(0);
   const [devMode, setDevMode] = useState(false);
   const [shortcuts, setShortcuts] = useState(false);
+  const [resumeOpen, setResumeOpen] = useState(false);
+
+  useEffect(() => {
+    function openResume() {
+      setResumeOpen(true);
+    }
+    window.addEventListener("open-resume", openResume);
+    return () => window.removeEventListener("open-resume", openResume);
+  }, []);
 
   useEffect(() => {
     function onKey(event: KeyboardEvent) {
@@ -641,7 +690,7 @@ export default function App() {
 
   return (
     <Layout devMode={devMode}>
-      <Hero mode={mode} paused={paused} burstSignal={burstSignal} onMode={setMode} onPause={() => setPaused((value) => !value)} />
+      <Hero mode={mode} paused={paused} burstSignal={burstSignal} onMode={setMode} onPause={() => setPaused((value) => !value)} onResume={() => setResumeOpen(true)} />
       <About />
       <Timeline />
       <Projects />
@@ -649,6 +698,7 @@ export default function App() {
       <LearningLog />
       <Contact />
       <KeyboardShortcuts open={shortcuts} onClose={() => setShortcuts(false)} />
+      <ResumeModal open={resumeOpen} onClose={() => setResumeOpen(false)} />
       <footer>built with react, canvas particles, backend brainrot, and probably too much coffee.</footer>
     </Layout>
   );
