@@ -359,7 +359,7 @@ function Hero({
           </motion.div>
           <motion.div className="hero-actions" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 2.05 }}>
             <a className="primary-btn" href="#projects">explore my work <ArrowRight size={18} /></a>
-            <a className="soft-btn" href={resumePath}><Download size={18} /> resume</a>
+            <a className="soft-btn" href={resumePath} download><Download size={18} /> resume</a>
             <a className="soft-btn" href="mailto:shriharish12345@gmail.com"><Mail size={18} /> say hi</a>
           </motion.div>
           <div className="keyboard-row">
@@ -587,7 +587,7 @@ function Contact() {
           <a className="primary-btn" href="mailto:shriharish12345@gmail.com"><Mail size={18} /> Email</a>
           <a className="soft-btn" href="https://linkedin.com/in/shriharishs"><BrandIcon label="IN" /> LinkedIn</a>
           <a className="soft-btn" href="https://github.com/shriharish1310"><BrandIcon label="GH" /> GitHub</a>
-          <a className="soft-btn" href={resumePath}><Download size={18} /> Resume</a>
+          <a className="soft-btn" href={resumePath} download><Download size={18} /> Resume</a>
         </div>
         <p className="muted">College Station, TX - 657-558-1379 - shriharish1310.github.io</p>
       </div>
