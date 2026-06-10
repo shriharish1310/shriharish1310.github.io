@@ -589,7 +589,7 @@ function Contact() {
           <a className="soft-btn" href="https://github.com/shriharish1310"><BrandIcon label="GH" /> GitHub</a>
           <a className="soft-btn" href={resumePath}><Download size={18} /> Resume</a>
         </div>
-        <p className="muted">College Station, TX - 657-558-1379 - shri.dev</p>
+        <p className="muted">College Station, TX - 657-558-1379 - shriharish1310.github.io</p>
       </div>
     </Section>
   );
